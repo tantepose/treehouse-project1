@@ -12,7 +12,7 @@ window.onload = function (){
 //get a random quote from the quotes array in quotes.js
 //and make sure it hasn't allready been shown
 function getRandomQuote (){
-  var randomNumber = Math.floor(Math.random() * quotes.length);
+  var randomNumber = getRandomNumber();
   console.log("*** Getting quote | randomNumber = " + randomNumber + " ***");
   console.log("-> quotes shown: " + quotesLog.length + " [" + quotesLog.join(",") + "]");
 
@@ -21,7 +21,7 @@ function getRandomQuote (){
     for (i = 0; i <= quotesLog.length; i++){ //is this quote allready shown?
 
         if (quotesLog.indexOf(randomNumber) > -1){ //yes: try again with new number
-          randomNumber = Math.floor(Math.random() * quotes.length);
+          randomNumber = getRandomNumber();
           console.log("Quote shown, trying again with " + randomNumber);
           i = -1; //resetting the loop
 
@@ -38,6 +38,10 @@ function getRandomQuote (){
         quotesLog.push(randomNumber);
         return quotes[randomNumber];
     }
+}
+
+function getRandomNumber(){
+  return Math.floor(Math.random() * quotes.length);
 }
 
 //gathering and outputting the quote and any additional data
