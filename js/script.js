@@ -1,89 +1,105 @@
+/* script.js:
+  Fullstack Javascript Techdegree, project 1
+  "Random Quote Generator" by Ole Petter Baugerød Stokke
+  www.olepetterstokke.no/treehouse/project1 */
+
 // event listener to respond to "Show another quote" button clicks
-// when user clicks anywhere on the button, the "printQuote" function is called
-document.getElementById('loadQuote').addEventListener("click", printQuote, false);
+document.getElementById("loadQuote").addEventListener("click", printQuote, false);
 
 var quotesLog = []; //array for storing whats been shown allready
 var timer = setInterval(printQuote, 20000); //getting a quote every 20th second
 
-window.onload = function (){
-  printQuote(); //start with a random quote
+window.onload = function (){ //start with a random quote
+  printQuote();
 }
 
-//get a random quote from the quotes array in quotes.js
-//and make sure it hasn't allready been shown
+/* getRandomQuote(): Get random quote object.
+  Picked randomly from the "qoutes" array in "quotes.js".
+  We log every random number being used to actually show quote, in the quotesLog array.
+  Each random number is checked, to see if the random number has allready been used.
+  When all numbers have been used (all quotes shown), the array is reset. */
+
 function getRandomQuote (){
   var randomNumber = getRandomNumber();
   console.log("*** Getting quote | randomNumber = " + randomNumber + " ***");
   console.log("-> quotes shown: " + quotesLog.length + " [" + quotesLog.join(",") + "]");
 
-  if (quotesLog.length < quotes.length){ //if unused quotes left, lets try
-
-    for (i = 0; i <= quotesLog.length; i++){ //is this quote allready shown?
-
-        if (quotesLog.indexOf(randomNumber) > -1){ //yes: try again with new number
-          randomNumber = getRandomNumber();
+  if (quotesLog.length < quotes.length){            //if unused quotes left at all
+    for (i = 0; i <= quotesLog.length; i++){
+        if (quotesLog.indexOf(randomNumber) > -1){  //if random quote index in log
+          randomNumber = getRandomNumber();         //try again, reset loop
           console.log("Quote shown, trying again with " + randomNumber);
-          i = -1; //resetting the loop
-
-        } else { //no: return the quote, push number to log
+          i = -1;
+        } else {                                    //if not in log, go ahead
             console.log("Quote NOT shown, returning: " + quotes[randomNumber].quote);
             quotesLog.push(randomNumber);
             return quotes[randomNumber];
           }
         }
 
-    } else { //no quotes left, returning quote and starting over
-        console.log("Quoteslog full, resetting and returning: " + quotes[randomNumber].quote);
-        quotesLog = []; //empty log
+    } else {                                        //if no quotes left, empty log and return quote
+        console.log("Quoteslog full, resetting log and returning: " + quotes[randomNumber].quote);
+        quotesLog = [];
         quotesLog.push(randomNumber);
         return quotes[randomNumber];
     }
 }
 
-function getRandomNumber(){
-  return Math.floor(Math.random() * quotes.length);
-}
+/*printQuote(): Outputting the random quote as HTML.
+  First we change the colors and reset the timer.
+  Then we output available data from the quote-object to HTML.*/
 
-//gathering and outputting the quote and any additional data
 function printQuote(){
   changeBackground();
-  setTimer(); //reset timer, avoiding new quote earlier then 20 sec after click
-  var randomQuote = getRandomQuote(); //get random quote as object
-  var textToPrint;  //declaring the string to send to the HTML
+  resetTimer();
+  var randomQuote = getRandomQuote();
+  var textToPrint;
 
-  //this prints every time (quote and source, required fields)
-  textToPrint = '<p class="quote">' + randomQuote.quote + '</p>' +
-    '<p class="source">' + randomQuote.source;
+  textToPrint = "<p class='quote'>" + randomQuote.quote + "</p>" +
+    "<p class='source'>" + randomQuote.source;
+  if (randomQuote.citation){
+    textToPrint += "<span class='citation'>" + randomQuote.citation + "</span>"
+  }
+  if (randomQuote.year){
+    textToPrint += "<span class='year'>" + randomQuote.year + "</span>";
+  }
+  if (randomQuote.link){ //outputs as an eye-link
+    textToPrint += "<span class='link'><a target='_blank' href='" +
+    randomQuote.link + "'> &#128065</a></span>";
+  }
+  textToPrint += "</p>"; //ending the "source" paragraph
 
-  if (randomQuote.citation){ //do we have a citation? if so; print it
-    textToPrint += '<span class="citation">' + randomQuote.citation + '</span>'
-  }
-  if (randomQuote.year){ //do we have a year?
-    textToPrint += '<span class="year">' + randomQuote.year + '</span>';
-  }
-  if (randomQuote.link){ //do we have a link?
-    textToPrint += '<span class="link"><a target="_blank" href="' +
-    randomQuote.link + '"> &#128065</a></span>'; //unicode for an eye
-  }
-
-  textToPrint += '</p>'; //ending the paragraph "source"
-  document.getElementById('quote-box').innerHTML = textToPrint; //print it
+  document.getElementById("quote-box").innerHTML = textToPrint;
 }
 
-//changing the background per quote
+/*changeBackground(): Randomly change the background and button color.
+  A hex color consists of a # sign followed by 16 numbers/letters.
+  Each are randomly selected from the "letters" string, treated as an array.*/
+
 function changeBackground(){
-  var letters = "0123456789ABCDEF"; //building bricks of hex color
-  var color = "#"; //declaring and starting the hex color to be made
-  for (var i = 0; i < 6; i++) { //hex color consists of six numbers/letters
-    color += letters.charAt(Math.floor(Math.random() * 16)); //mixing the 16 bricks
+  var letters = "0123456789ABCDEF";
+  var color = "#";
+  for (var i = 0; i < 6; i++) {
+    color += letters.charAt(Math.floor(Math.random() * 16));
   }
   document.body.style.backgroundColor = color;
   document.getElementById("loadQuote").style.backgroundColor = color;
 }
 
-//reset the timer by turning it off and on again
-function setTimer(){
+/*resetTimer(): Reset the timer.
+  Done thru turning it off and on again.
+  This is done to prevent the quote from changing earlier than 20 sec. after click.*/
+
+function resetTimer(){
   console.log("Setting timer for 20 seconds.");
   clearInterval(timer);
   timer = setInterval(printQuote, 20000);
+}
+
+/*getRandomNumber(): Getting a random number from 0 to quotes.length.
+  Made as we need a random number two times in the getRandomQuote(),
+  to don't repeat ourself.*/
+
+function getRandomNumber(){
+  return Math.floor(Math.random() * quotes.length);
 }

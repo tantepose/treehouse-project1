@@ -1,11 +1,21 @@
-//array containg each quote as an object
+/*quotes.js:
+Declares the "quotes" array, with all the quote objects.
+
+Each object consists of:
+  .quote: What's been said. (required)
+  .source: Who said it. (required)
+  .citation: Where it was said. (optional)
+  .year: When it was said. (optional)
+  .link: Where to hear this being said. (optional)
+*/
+
 var quotes = [
   {
-    quote: "Never tell me the odds.", //whats been said
-    source: "Han Solo", //who said it
-    citation: "Star Wars: Episode V – The Empire Strikes Back", //where it was said
-    year: 1980, //when it was said
-    link: "https://www.youtube.com/watch?v=uYX-NSZMqt0" //where to hear or read more
+    quote: "Never tell me the odds.",
+    source: "Han Solo",
+    citation: "Star Wars: Episode V – The Empire Strikes Back",
+    year: 1980,
+    link: "https://www.youtube.com/watch?v=uYX-NSZMqt0"
   },
   {
     quote: "Do. Or do not. There is no try.",
