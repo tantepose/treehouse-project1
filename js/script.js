@@ -73,8 +73,8 @@ function printQuote(){
 }
 
 /*changeBackground(): Randomly change the background and button color.
-  A hex color consists of a # sign followed by 16 numbers/letters.
-  Each are randomly selected from the "letters" string, treated as an array.*/
+  A hex color consists of a # sign followed by 6 numbers/letters.
+  Each are randomly selected from the 16 in "letters" string.*/
 
 function changeBackground(){
   var letters = "0123456789ABCDEF";
